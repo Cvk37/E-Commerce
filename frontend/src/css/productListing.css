@@ -1,0 +1,32 @@
+.image-container{
+display: flex;
+justify-content: flex-start;
+width: 400px;
+}
+
+
+.product-show{
+ display: flex;
+ justify-content: flex-start;
+ margin-left: 10px;
+ 
+}
+.image{
+ width: 100%;
+}
+
+.carousel-container {
+  max-width: 400px; /* Adjust the width as needed */
+}
+.product-description{
+margin-left: 200px;
+margin-top: 20px;
+}
+
+.product-description p{
+font-size: 20px;
+}
+.button-style{
+margin-left: 10px;
+margin-right: 10px;
+}

@@ -1,0 +1,39 @@
+/* Navbar.css */
+.navbar {
+  justify-content: space-evenly;
+}
+
+ul {
+  list-style-type: none; /* Remove default list styling */
+  margin: 0;
+  padding: 0;
+}
+
+.category-display {
+  display: inline; /* Display list items horizontally */
+  margin-right: 20px; /* Spacing between list items */
+}
+.category-name{
+  color: white; /* Link text color */
+  text-decoration: none; /* Remove underline from links */
+  font-weight: bold; /* Bold font */
+}
+
+
+a:hover {
+  color: #ddd; /* Text color on hover */
+}
+
+.search{
+justify-self: start;
+
+}
+
+.cart{
+margin-right: 20px;
+}
+
+.login{
+ margin-left: auto;
+ margin-right:10px
+}
