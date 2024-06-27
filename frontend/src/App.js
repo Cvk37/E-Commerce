@@ -9,7 +9,6 @@ import Cart from './components/cart';
 import LoginComponent from './components/LoginComponent';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
-import LoginPage from './components/LoginPage';
 
 
 

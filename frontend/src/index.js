@@ -4,14 +4,19 @@ import App from './App';
 import './css/index.css'
 import { CartProvider } from './context/CartContext';
 import { AuthenticationProvider } from './context/AuthenticationContext';
+import { ToastContainer } from 'react-toastify';
+import { DealsProvider } from './context/DealsContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <React.StrictMode>
  <AuthenticationProvider>
+ <DealsProvider>
  <CartProvider>
    <App />
  </CartProvider>
+</DealsProvider>
 </AuthenticationProvider>
+ <ToastContainer />
 </React.StrictMode>
 );
 

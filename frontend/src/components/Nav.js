@@ -7,13 +7,14 @@ import { Cart } from 'react-bootstrap-icons';
 import AuthenticationContext  from '../context/AuthenticationContext';
 import CartContext from '../context/CartContext';
 import { Badge } from 'react-bootstrap';
-
+import logoImage from '../images/Sho.png';
 const CustomNavbar = ({ categories }) => {
 
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthenticationContext);
+  const { isLoggedIn, setIsLoggedIn,isCartAccessAllowed,setIsCartAccessAllowed} = useContext(AuthenticationContext);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setIsCartAccessAllowed(false);
   };
 
   const { cartItems } = useContext(CartContext);
@@ -21,7 +22,13 @@ const CustomNavbar = ({ categories }) => {
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand as={Link} to="/">ShopNest</Navbar.Brand>
+      <Navbar.Brand as={Link} to="/"> <img
+          src={logoImage}  // Use the imported image path here
+          width="70"
+          height="60"
+          className="Logo"
+          alt="Your Logo"
+        /> </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

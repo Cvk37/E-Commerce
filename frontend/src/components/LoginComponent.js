@@ -1,11 +1,16 @@
 import React, { useContext, useState } from 'react';
 import AuthenticationContext from '../context/AuthenticationContext';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginComponent = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { isLoggedIn, setIsLoggedIn,setIsCartAccessAllowed } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   
 
 const loginUser = async (username, password) => {
@@ -27,11 +32,14 @@ const loginUser = async (username, password) => {
       // If login is successful, update isLoggedIn state to true
       setIsLoggedIn(true);
       setIsCartAccessAllowed(true);
+      toast.success(`Welcome, ${username}!`,{position: "top-center"});
+      navigate('/')
+      
       
       
     } catch (error) {
       console.error('Login failed:', error);
-      // Handle login error (e.g., display error message)
+      toast.error(`Login failed: ${error.message}`,{position: "top-center"});
     }
   };
 

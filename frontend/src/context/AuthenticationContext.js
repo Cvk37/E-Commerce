@@ -6,8 +6,12 @@ export const AuthenticationProvider = ({ children }) => {
   
 const [isCartAccessAllowed, setIsCartAccessAllowed] = useState(false);
  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Initialize state from localStorage or default to false
-    return localStorage.getItem('isLoggedIn') === 'true';
+    try {
+      return localStorage.getItem('isLoggedIn') === 'true';
+    } catch (error) {
+      console.error('Error accessing localStorage', error);
+      return false;
+    }
   });
  useEffect(() => {
     // Save state to localStorage whenever it changes
