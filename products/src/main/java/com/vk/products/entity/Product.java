@@ -1,48 +1,57 @@
-package com.vk.products.entity;
 
+package com.vk.products.entity;
+import java.util.List;
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name="products")
+@Table(name = "products")
 public class Product {
-@Id
-@Column(name = "product_id",nullable = false)
-private Long id;
 
-@Column(name = "name",nullable = false)
-private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
-@Column(name = "description",nullable = false)
-private String description;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-@Column(name = "price",nullable = false)
-private Double price;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumns({
-        @JoinColumn(name = "category_id", referencedColumnName = "category_id"),
-        @JoinColumn(name = "category_name", referencedColumnName = "category_name")
-})
-private Category category;
+    @Column(name = "price", nullable = false)
+    private Double price;
 
-    public Product(Long id, String name, String description, Double price, Category category) {
-        this.id = id;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;    
+    
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
+
+    public Product(){
+
+    }
+    public Product(Long productId, String name, String description, Double price, Category category, List<Image> images) {
+        this.productId = productId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
+        this.images = images;
     }
-    public Product(){
-
-    }
-
-    public Long getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long productId) {
+        this.productId = productId;
+    }
+    
+    public List<Image> getImages() {
+        return images;
+    }
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     public String getName() {

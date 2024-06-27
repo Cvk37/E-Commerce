@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@CrossOrigin("http://localhost:3000")
+
+@CrossOrigin(originPatterns =  "https://localhost:3000")
 @RestController
 public class UserController {
     @Autowired

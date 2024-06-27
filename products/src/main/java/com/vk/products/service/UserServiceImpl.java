@@ -1,34 +1,33 @@
 package com.vk.products.service;
 
 import com.vk.products.entity.User;
-import com.vk.products.exception.UserNotFoundException;
 import com.vk.products.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-private UserRepository userRepository;
-
+    
+    private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
    @Override
     public User registerUser(User user) {
-        // Save the user to the database
+        //encode the password before saving to the database
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
     
     @Override
     public User getUser(String username) {
         User user = userRepository.findByUsername(username);
-        System.out.println(user);
-        if (user == null) {
-            
-            throw new UserNotFoundException("User not found with username: " + username);
-            
-        }
         return user;
     }
     
