@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 import '../css/Navbar.css';
 import SearchBar from './searchBar';
 import { Cart } from 'react-bootstrap-icons';
@@ -45,7 +45,11 @@ const CustomNavbar = ({ categories }) => {
             <Nav.Link as={Link} to="/register" className='register'>Register</Nav.Link>
           </>
         ) : (
+          <>
           <Nav.Link as={Link} to="/" onClick={handleLogout} className='login'>Logout</Nav.Link>
+          <Nav.Link as={Link} to="/profile" className='register'>My Profile</Nav.Link>
+          </>
+          
         )}
         <Nav.Link as={Link} to={isLoggedIn ? "/cart" : "/login"} className='cart'>
           <Cart size={24}/> 

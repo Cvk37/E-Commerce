@@ -9,6 +9,7 @@ import Cart from './components/cart';
 import LoginComponent from './components/LoginComponent';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
+import UserProfile from './components/UserProfile';
 
 
 
@@ -45,6 +46,7 @@ const App = () => {
 <Route path='/cart' element={<Cart/>}/>
 <Route path='/login' element={<LoginComponent/>} />
 <Route path='/register' element={<Register/>} />
+<Route path='/profile' element = {<UserProfile/>}/>
 
 
 </Routes>

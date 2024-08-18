@@ -9,8 +9,8 @@ public class SecretKeyGenerator {
         new SecureRandom().nextBytes(randomBytes);
 
         // Encode the random bytes to a Base64-encoded string
+        @SuppressWarnings("unused")
         String secretKey = Base64.getEncoder().encodeToString(randomBytes);
 
-        System.out.println("Generated Secret Key: " + secretKey);
     }
 }

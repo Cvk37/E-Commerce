@@ -1,5 +1,6 @@
 package com.vk.products.service;
 
+import com.vk.products.Dto.UserProfileDTO;
 import com.vk.products.entity.User;
 import com.vk.products.repository.UserRepository;
 
@@ -17,6 +18,8 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+  
 
    @Override
     public User registerUser(User user) {
@@ -37,5 +40,9 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
+    @Override
+    public UserProfileDTO getUserProfileByUsername(String username) {
+        User user = getUser(username);
+        return new UserProfileDTO(user);
+    }
 }

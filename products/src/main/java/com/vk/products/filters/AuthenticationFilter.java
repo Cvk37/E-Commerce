@@ -39,12 +39,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             response.setContentType("application/json");
             response.getWriter().write("Authentication failed, reason: " + failed.getMessage());
             response.getWriter().flush();
-            System.out.println("Authentication failed");
     }
     @Override
     public void successfulAuthentication(HttpServletRequest request,HttpServletResponse response,FilterChain chain, Authentication authResult) throws IOException, ServletException {
      JwtUtils jwtUtils = new JwtUtils();
         String token = jwtUtils.generateJwtToken(authResult.getName());
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("Authorization", "Bearer" + token);
+        response.getWriter().write("{\"token\": \"" + token + "\"}");
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

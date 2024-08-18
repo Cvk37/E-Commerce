@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState , useEffect} from 'react';
 import AuthenticationContext from '../context/AuthenticationContext';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import{ toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { isTokenExpired,removeToken } from '../utils/authUtils';
 
 
 const LoginComponent = () => {
@@ -13,10 +14,22 @@ const LoginComponent = () => {
   const navigate = useNavigate();
   
 
+useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token && isTokenExpired(token)) {
+      setIsLoggedIn(false)
+      removeToken();
+      navigate('/')
+      toast.error('Session expired, please log in again.', { position: 'top-center' });
+    }
+  }, []);
 const loginUser = async (username, password) => {
   try {
-    const response = await axios.post('http://localhost:8080/login', { username, password });
-    return response.data; // Assuming the response contains data indicating success or failure
+     const response = await axios.post('http://localhost:8080/login', { username, password });
+    const token = response.data.token;
+    localStorage.setItem('token', token);
+    return response.data // Assuming the response contains data indicating success or failure
+    
   } catch (error) {
     throw error; // Forward any errors to be handled by the caller
   }
@@ -27,16 +40,14 @@ const loginUser = async (username, password) => {
      e.preventDefault();
     // Perform login logic (e.g., make an API call to authenticate user)
     try {
-    
-      await loginUser(username, password);
+      
+       await loginUser(username, password);
+
       // If login is successful, update isLoggedIn state to true
       setIsLoggedIn(true);
       setIsCartAccessAllowed(true);
       toast.success(`Welcome, ${username}!`,{position: "top-center"});
       navigate('/')
-      
-      
-      
     } catch (error) {
       console.error('Login failed:', error);
       toast.error(`Login failed: ${error.message}`,{position: "top-center"});
