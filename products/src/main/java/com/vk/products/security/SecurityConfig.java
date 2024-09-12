@@ -62,10 +62,7 @@ public class SecurityConfig {
             .addFilter(authenticationFilter)
             .sessionManagement(sessionManagement -> sessionManagement
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Set session creation policy
-                .maximumSessions(1) // Allow only one session per user
-                .maxSessionsPreventsLogin(true) // Prevent new login if maximum sessions reached
-                .expiredUrl("/login?expired=true") // Redirect to login page if session expired
-            );
+                );
         return http.build();
     }
 
