@@ -1,29 +1,35 @@
 .home-page {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  
+}
+
+
+h1 {
+  color: #333;
 }
 
 .welcome-section {
-  margin-bottom: 20px;
+  margin-top: 5px;
   text-align: center;
 }
 
 .deals-section {
-  background-color: #f5f5f5;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #D1B1C8;
 }
 
 .deals-container {
-  display: grid;
+  display: flex;
   gap: 20px;
+  background-color: #EEEEEE;
+  flex-grow: 0;
 }
 
 @media (min-width: 768px) {
   .deals-container {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }

@@ -5,7 +5,7 @@ import Products from './components/products';
 import IndividualProduct from './components/productListing';
 import CustomNavbar from './components/Nav';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Cart from './components/cart';
+import Cart from './components/cart.tsx';
 import LoginComponent from './components/LoginComponent';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
@@ -16,6 +16,7 @@ import UserProfile from './components/UserProfile';
 
 const App = () => {
   const [data, setData] = useState([]);
+  
 
   useEffect(() => {
     const fetchData = async () => {

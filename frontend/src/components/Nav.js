@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { Navbar, Nav,Badge } from 'react-bootstrap';
 import '../css/Navbar.css';
 import SearchBar from './searchBar';
 import { Cart } from 'react-bootstrap-icons';
 import AuthenticationContext  from '../context/AuthenticationContext';
 import CartContext from '../context/CartContext';
-import { Badge } from 'react-bootstrap';
 import logoImage from '../images/Sho.png';
 const CustomNavbar = ({ categories }) => {
 
-  const { isLoggedIn, setIsLoggedIn,isCartAccessAllowed,setIsCartAccessAllowed} = useContext(AuthenticationContext);
+  const { isLoggedIn, setIsLoggedIn,setIsCartAccessAllowed} = useContext(AuthenticationContext);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
     setIsCartAccessAllowed(false);
   };
@@ -21,8 +21,9 @@ const CustomNavbar = ({ categories }) => {
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand as={Link} to="/"> <img
+  
+    <Navbar className='navbar' expand="lg">
+      <Navbar.Brand className='logo' as={Link} to="/"> <img
           src={logoImage}  // Use the imported image path here
           width="70"
           height="60"

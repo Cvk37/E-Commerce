@@ -22,7 +22,7 @@ useEffect(() => {
       navigate('/')
       toast.error('Session expired, please log in again.', { position: 'top-center' });
     }
-  }, []);
+  }, [setIsLoggedIn,navigate]);
 const loginUser = async (username, password) => {
   try {
      const response = await axios.post('http://localhost:8080/login', { username, password });

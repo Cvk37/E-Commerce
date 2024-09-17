@@ -16,7 +16,7 @@ const HomePage = () => {
     <div className="home-page">
       <div className="welcome-section">
         <h2>Welcome to ShopNest!</h2>
-        <h3>Where shopping online is made simple and easy</h3>
+        <h4>Where shopping online is made simple and easy</h4>
       </div>
       <div className="deals-section">
         <h4>Limited Time Deals</h4>

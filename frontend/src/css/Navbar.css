@@ -1,8 +1,14 @@
-/* Navbar.css */
-/* .navbar {
-  justify-content: space-evenly;
-} */
 
+.navbar{
+background-color: #EFC7C2;
+padding: 0;
+
+}
+
+.logo{
+border-radius: 50%;
+margin-left: 5px;
+}
 ul {
   list-style-type: none; /* Remove default list styling */
   margin: 0;

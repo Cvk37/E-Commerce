@@ -1,18 +1,13 @@
 .deal-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+display: inline-flex;  
 }
 
 .deal-item {
-  border: 1px solid #ddd;
+  border: 10px solid #ddd;
   padding: 10px;
   width: 250px;
-}
-
-.carousel-container {
-  width: 100%;
-  height: 200px;
+  
+  
 }
 
 .image-container {
@@ -23,7 +18,7 @@
 
 .deal-image {
   width: 80%;
-  height: 80%;
+  height: 70%;
   object-fit: cover;
 }
 .deal-description {
@@ -44,7 +39,7 @@
 
 .discounted-price {
   font-weight: bold;
-  color: #4caf50; /* Green color for discounted price */
+  color: #4caf50; 
   margin-right: 10px;
 }
 
