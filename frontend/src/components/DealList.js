@@ -16,7 +16,7 @@ const DealList = () => {
       {deals.map(deal => (
         <div key={deal.id} className="deal-item">
           <div className='deal-description'>
-           <h6><Link to={`/products/${deal.product.name}`}>{deal.product.name} </Link></h6>
+           <h6><Link className='deal-name' to={`/products/${deal.product.name}`}>{deal.product.name} </Link></h6>
             {deal.product.images.length > 0 && (
               <img src={deal.product.images[0].url} alt="Deal Image" className="deal-image" />
             )}
