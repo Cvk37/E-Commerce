@@ -52,11 +52,13 @@ const CustomNavbar = ({ categories }) => {
           </>
           
         )}
-        <Nav.Link as={Link} to={isLoggedIn ? "/cart" : "/login"} className='cart'>
-          <Cart size={24}/> 
-          <span className="cart-text">Cart</span>
-          {cartItemCount > 0 && <Badge bg="primary">{cartItemCount}</Badge>}
-        </Nav.Link>
+        {isLoggedIn && (
+  <Nav.Link as={Link} to="/cart" className='cart'>
+    <Cart size={24}/> 
+    <span className="cart-text">Cart</span>
+    {cartItemCount > 0 && <Badge bg="primary">{cartItemCount}</Badge>}
+  </Nav.Link>
+)}
       </Navbar.Collapse>
     </Navbar>
   );
