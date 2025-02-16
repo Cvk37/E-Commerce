@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableScheduling
 public class ProductsApplication {
 
-	@Bean
-    public PasswordEncoder encoder() {
+    @Bean
+    PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 	public static void main(String[] args) {

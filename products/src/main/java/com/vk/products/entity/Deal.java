@@ -1,4 +1,4 @@
-package com.vk.products.entity;
+ package com.vk.products.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;

@@ -39,7 +39,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
          
     String token = header.replace("Bearer ","");
-        System.out.println(token);
         if(jwtUtils.validateJwtToken(token)){
         String username = jwtUtils.getUserNameFromJwtToken(token);
         var userDetails = customUserDetailsService.loadUserByUsername(username);

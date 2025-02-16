@@ -34,6 +34,7 @@ public class JwtUtils {
                 .compact();
     }
 
+    
     public Claims getClaimsFromToken(String token) {
         return Jwts.parser()
                 .verifyWith(key)

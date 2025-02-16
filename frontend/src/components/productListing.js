@@ -99,9 +99,7 @@ const IndividualProduct = () => {
           </span>
         </div>
         <a href={`http://localhost:3000/categories/${category.categoryId}/${category.name}`}>Home</a>
-        <Button component={Link} to="http://localhost:3000">
-          Home Page
-        </Button>
+       
       </div>
     </div>
   );

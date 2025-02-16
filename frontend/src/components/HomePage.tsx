@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import DealList from './DealList';
-import '../css/HomePage.css'; // Import the CSS file for styling
+import DealList from './DealList.tsx';
+import '../css/HomePage.css';
 
-const HomePage = () => {
-  const [deals, setDeals] = useState([]);
+// Define the type for a deal
+interface Deal {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+}
+
+const HomePage: React.FC = () => {
+  const [deals, setDeals] = useState<Deal[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/deals')
+    axios.get<Deal[]>('http://localhost:8080/deals')
       .then(response => setDeals(response.data))
       .catch(error => console.error('Error fetching deals:', error));
   }, []);
@@ -29,7 +38,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-
-
