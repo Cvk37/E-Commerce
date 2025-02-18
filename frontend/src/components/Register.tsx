@@ -1,90 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { Container, TextField, Button, Box, Typography, Paper } from '@mui/material';
 
-const Register = () => {
-  const [formData, setFormData] = useState({
+// Define the form data structure
+interface FormData {
+  username: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+}
+
+// Define the error structure
+interface FormErrors {
+  username?: string;
+  password?: string;
+  confirmPassword?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string;
+  apiError?: string;
+}
+
+const Register: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     username: '',
     password: '',
+    confirmPassword: '',
     email: '',
     firstName: '',
     lastName: '',
     dateOfBirth: ''
   });
 
-  const [errors, setErrors] = useState({
-    username: '',
-    password: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: ''
-  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = (e) => {
+  // Handle input changes
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' }); // Clear error when user starts typing
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' })); // Clear error when user types
   };
 
-  const handleSubmit = async (e) => {
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let formIsValid = true;
+    const newErrors: FormErrors = {};
 
     // Validate username
-    if (!formData.username) {
-      setErrors((prevErrors) => ({ ...prevErrors, username: 'Username is required' }));
-      formIsValid = false;
-    }
+    if (!formData.username) newErrors.username = 'Username is required';
 
     // Validate password
     if (!formData.password) {
-      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password is required' }));
-      formIsValid = false;
+      newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
-      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must be at least 8 characters long' }));
-      formIsValid = false;
+      newErrors.password = 'Password must be at least 8 characters long';
     } else if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(formData.password)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: 'Password must contain at least one lowercase letter, one uppercase letter, and one digit'
-      }));
-      formIsValid = false;
+      newErrors.password = 'Password must contain at least one lowercase letter, one uppercase letter, and one digit';
+    }
+
+    // Validate confirmPassword
+    if (formData.confirmPassword !== formData.password) {
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     // Validate email
     if (!formData.email) {
-      setErrors((prevErrors) => ({ ...prevErrors, email: 'Email is required' }));
-      formIsValid = false;
+      newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setErrors((prevErrors) => ({ ...prevErrors, email: 'Email is invalid' }));
-      formIsValid = false;
+      newErrors.email = 'Email is invalid';
     }
 
     // Validate firstName
-    if (!formData.firstName) {
-      setErrors((prevErrors) => ({ ...prevErrors, firstName: 'First name is required' }));
-      formIsValid = false;
-    }
+    if (!formData.firstName) newErrors.firstName = 'First name is required';
 
     // Validate lastName
-    if (!formData.lastName) {
-      setErrors((prevErrors) => ({ ...prevErrors, lastName: 'Last name is required' }));
-      formIsValid = false;
-    }
+    if (!formData.lastName) newErrors.lastName = 'Last name is required';
 
     // Validate dateOfBirth
-    if (!formData.dateOfBirth) {
-      setErrors((prevErrors) => ({ ...prevErrors, dateOfBirth: 'Date of birth is required' }));
+    if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
+
+    // Check if there are any validation errors
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       formIsValid = false;
     }
 
     if (formIsValid) {
+      setLoading(true);
       try {
         const response = await axios.post('http://localhost:8080/register', formData);
         console.log('User registered successfully:', response.data);
-      } catch (error) {
-        console.error('Failed to register user:', error);
+      } catch (error: any) {
+        setErrors((prev) => ({
+          ...prev,
+          apiError: error.response?.data?.message || 'Registration failed. Please try again.'
+        }));
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -95,6 +113,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
+        {errors.apiError && <Typography color="error">{errors.apiError}</Typography>}
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
@@ -118,11 +137,24 @@ const Register = () => {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             value={formData.password}
             onChange={handleChange}
             error={!!errors.password}
             helperText={errors.password}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword}
           />
           <TextField
             margin="normal"
@@ -179,8 +211,8 @@ const Register = () => {
             error={!!errors.dateOfBirth}
             helperText={errors.dateOfBirth}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Register
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </Button>
         </Box>
       </Paper>

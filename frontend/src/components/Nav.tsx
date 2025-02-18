@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Badge } from 'react-bootstrap';
 import '../css/Navbar.css';
-import SearchBar from './searchBar';
+import SearchBar from './searchBar.tsx';
 import { Cart } from 'react-bootstrap-icons';
 import AuthenticationContext from '../context/AuthenticationContext';
 import CartContext from '../context/CartContext';

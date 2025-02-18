@@ -2,33 +2,49 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AuthenticationContext from '../context/AuthenticationContext';
 
-const UserProfile = () => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { isLoggedIn } = useContext(AuthenticationContext); // Assume you have authentication state here
+interface UserProfileData {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  // Add other fields as necessary
+}
+
+const UserProfile: React.FC = () => {
+  const [profile, setProfile] = useState<UserProfileData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { isLoggedIn } = useContext(AuthenticationContext); // Assume authentication state
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:8080/profile', {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError('No authentication token found');
+          setLoading(false);
+          return;
+        }
+
+        const response = await axios.get<UserProfileData>('http://localhost:8080/profile', {
           headers: {
-            'Authorization':`Bearer ${localStorage.getItem('token')}` 
-          }
-        })
-        console.log(response.data)
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         setProfile(response.data);
-        setLoading(false);
-        return;
       } catch (err) {
         setError('Failed to fetch profile');
-        setLoading(false);
         console.error('Error fetching profile:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProfile();
+    if (isLoggedIn) {
+      fetchProfile();
+    }
   }, [isLoggedIn]);
 
   if (loading) return <div>Loading...</div>;

@@ -4,10 +4,23 @@ import { Button } from '@mui/material';
 import DealsContext from '../context/DealsContext';
 import '../css/Products.css';
 
-const Products = () => {
-  const { categoryId, categoryName } = useParams();
-  const [products, setProducts] = useState([]);
-  const { deals } = useContext(DealsContext);
+interface Product {
+  productId: number;
+  name: string;
+  description: string;
+  price: number;
+  images?: { url: string }[];
+}
+
+interface Deal {
+  product: { productId: number };
+  discount: number;
+}
+
+const Products: React.FC = () => {
+  const { categoryId, categoryName } = useParams<{ categoryId: string; categoryName: string }>();
+  const [products, setProducts] = useState<Product[]>([]);
+  const { deals } = useContext<{ deals: Deal[] }>(DealsContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,29 +30,22 @@ const Products = () => {
           throw new Error(`Failed to fetch products: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const data: Product[] = await response.json();
         setProducts(data);
       } catch (error) {
-        console.error('Error fetching products:', error.message);
+        console.error('Error fetching products:', (error as Error).message);
       }
     };
 
     fetchProducts();
   }, [categoryId]);
 
-  // Function to calculate discounted price
-  const calculateDiscountedPrice = (product) => {
+  const calculateDiscountedPrice = (product: Product): string | null => {
     const currentDeal = deals.find(deal => deal.product.productId === product.productId);
-
-    if (currentDeal) {
-      const discountedPrice = (product.price * (1 - currentDeal.discount / 100)).toFixed(2);
-      return discountedPrice;
-    }
-    return null; // Return null if no deal found
+    return currentDeal ? (product.price * (1 - currentDeal.discount / 100)).toFixed(2) : null;
   };
 
-  // Function to determine if a product has a deal
-  const hasDeal = (productId) => {
+  const hasDeal = (productId: number): boolean => {
     return deals.some(deal => deal.product.productId === productId);
   };
 

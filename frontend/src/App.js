@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter,Route,Routes } from 'react-router-dom';
-import Products from './components/products';
-import IndividualProduct from './components/productListing';
+import Products from './components/products.tsx';
+import IndividualProduct from './components/productListing.tsx';
 import CustomNavbar from './components/Nav.tsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cart from './components/cart.tsx';
 import LoginComponent from './components/LoginComponent.tsx';
-import Register from './components/Register';
+import Register from './components/Register.tsx';
 import HomePage from './components/HomePage.tsx';
-import UserProfile from './components/UserProfile';
+import UserProfile from './components/UserProfile.tsx';
 
 
 

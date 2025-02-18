@@ -1,57 +1,80 @@
 import { Button } from '@mui/material';
-import React, { useEffect, useState, useContext} from 'react';
-import { Link, useParams,useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import '../css/productListing.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import CartContext from '../context/CartContext';
-import DealsContext from '../context/DealsContext'; // Import DealsContext
-import AuthenticationContext from '../context/AuthenticationContext'
+import DealsContext from '../context/DealsContext';
+import AuthenticationContext from '../context/AuthenticationContext';
 
-const IndividualProduct = () => {
-  const { productName } = useParams();
-  const [product, setProduct] = useState(null);
-  const [images, setImages] = useState([]);
+// Define types
+interface Product {
+  productId: number;
+  name: string;
+  category: {
+    categoryId: number;
+    name: string;
+  };
+  price: number;
+  description: string;
+}
+
+interface Image {
+  id: number;
+  url: string;
+}
+
+interface Deal {
+  product: {
+    productId: number;
+  };
+  discount: number;
+}
+
+const IndividualProduct: React.FC = () => {
+  const { productName } = useParams<{ productName: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [images, setImages] = useState<Image[]>([]);
   const { addToCart } = useContext(CartContext);
-  const{isCartAccessAllowed}=useContext(AuthenticationContext);
-  const { deals } = useContext(DealsContext); // Access activeDeals from DealsContext
+  const { isCartAccessAllowed } = useContext(AuthenticationContext);
+  const { deals } = useContext(DealsContext);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!productName) return;
+
         // Fetch product details
         const productResponse = await fetch(`http://localhost:8080/products/${productName}`);
-        if (!productResponse.ok) {
-          throw new Error(`Failed to fetch product: ${productResponse.statusText}`);
-        }
-        const productData = await productResponse.json();
+        if (!productResponse.ok) throw new Error(`Failed to fetch product: ${productResponse.statusText}`);
+
+        const productData: Product = await productResponse.json();
         setProduct(productData);
 
         // Fetch images
         const imagesResponse = await fetch(`http://localhost:8080/product/${productName}`);
-        if (!imagesResponse.ok) {
-          throw new Error(`Failed to fetch images: ${imagesResponse.statusText}`);
-        }
-        const imageData = await imagesResponse.json();
+        if (!imagesResponse.ok) throw new Error(`Failed to fetch images: ${imagesResponse.statusText}`);
+
+        const imageData: Image[] = await imagesResponse.json();
         setImages(imageData);
       } catch (error) {
-        console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', (error as Error).message);
       }
     };
 
-    if (productName) {
-      fetchData();
-    }
+    fetchData();
   }, [productName]);
 
   const handleAddToCart = () => {
-    console.log(isCartAccessAllowed)
-    if(!isCartAccessAllowed){
-    navigate("../login")
-    return
+    if (!isCartAccessAllowed) {
+      navigate("../login");
+      return;
     }
-    const productData = { product, images };
-    addToCart(productData);
+    if (product) {
+      addToCart({ product, images });
+    }
   };
 
   if (!product) {
@@ -59,25 +82,17 @@ const IndividualProduct = () => {
   }
 
   const { category, price } = product;
+
   // Calculate discounted price if there's an active deal
-  let discountedPrice = null;
-   const currentDeal = deals.find(deal => {
-  return deal.product.productId === product.productId;
-});
-  if (currentDeal) {
-    discountedPrice = (price * (1 - currentDeal.discount / 100)).toFixed(2);
-    
-  }
+  const currentDeal = deals.find((deal: Deal) => deal.product.productId === product.productId);
+  const discountedPrice = currentDeal ? (price * (1 - currentDeal.discount / 100)).toFixed(2) : null;
 
   return (
     <div className='product-show'>
       <Carousel className='carousel-container'>
-        {images.map(image => (
+        {images.map((image) => (
           <div key={image.id} className='image-container'>
-            <img className='image'
-              src={image.url}
-              alt=''
-            />
+            <img className='image' src={image.url} alt='' />
           </div>
         ))}
       </Carousel>
@@ -99,7 +114,6 @@ const IndividualProduct = () => {
           </span>
         </div>
         <a href={`http://localhost:3000/categories/${category.categoryId}/${category.name}`}>Home</a>
-       
       </div>
     </div>
   );
